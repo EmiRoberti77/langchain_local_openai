@@ -41,5 +41,8 @@ while(True):
   query = input(':>')
   if(query in ['close', 'q', 'quit', 'exit']):
     break
-  result = chain({"question":query, "chat_history":chatHistory})
-  out(msg=result['answer'], color=CR.green, reset=True)
+  try:
+    result = chain({"question":query, "chat_history":chatHistory})
+    out(msg=result['answer'], color=CR.green, reset=True)
+  except Exception as e:
+    out(msg=str(e), color=CR.red, reset=True)
