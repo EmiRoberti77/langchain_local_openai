@@ -1,0 +1,6 @@
+persist
+data
+__pycache__
+*.key
+.vscode
+accounts.txt
