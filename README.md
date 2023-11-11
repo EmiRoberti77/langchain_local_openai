@@ -6,10 +6,7 @@ this code need to be able to load data from a data directory
 
 so place your files
 
-- project
-  --- data
-  ------ data1.txt
-  ------ data2.txt
-  ------- data3.txt
-  -- main.py
-  -- constants.py
+
+<img width="186" alt="Screenshot 2023-11-11 at 16 09 01" src="https://github.com/EmiRoberti77/langchain_local_openai/assets/114434826/031a7807-244d-41b9-a7c5-4c4ce0e4c7d9">
+
+to start run : python3 main.py
