@@ -1,10 +1,13 @@
-APIKEY ='<replace>'
+APIKEY ='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'
 DOCUMENT = './data/data.txt'
 DOCUMENT_ROOT = 'data/' 
 PERSIST = True
 PERSIST_ROOT = 'persist'
 RESUME_INDEX = 'resuming index'
 LINE_BREAK = '____________________________' 
+exitCommands = ['close', 'q', 'quit', 'exit']
+INPUT_READY = ':>'
+EXIT = 'Ciao!'
 
 class ColorWrapper:
   red = "\033[91m"
@@ -23,3 +26,5 @@ def console(**kwags):
     print(f"{color}{msg}{ColorWrapper.reset}")
   else:
     print(f"{color}{msg}")
+ 
+

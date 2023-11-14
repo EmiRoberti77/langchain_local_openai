@@ -1,4 +1,4 @@
-import constants
+import constants as constants
 from constants import console as out
 from constants import ColorWrapper as CR
 import os
@@ -38,11 +38,13 @@ chain = ConversationalRetrievalChain.from_llm(
 chatHistory = []
 query = None
 while(True):
-  query = input(':>')
-  if(query in ['close', 'q', 'quit', 'exit']):
+  query = input(constants.INPUT_READY).strip()
+  if(query in constants.exitCommands):
     break
   try:
     result = chain({"question":query, "chat_history":chatHistory})
     out(msg=result['answer'], color=CR.green, reset=True)
   except Exception as e:
     out(msg=str(e), color=CR.red, reset=True)
+out(msg=constants.EXIT, color=CR.yellow, reset=True)
+    

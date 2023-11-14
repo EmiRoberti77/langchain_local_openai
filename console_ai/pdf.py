@@ -1,4 +1,4 @@
-import constants
+import console.constants as constants
 import os
 
 from pdfminer.high_level import extract_text
