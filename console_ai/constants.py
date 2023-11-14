@@ -1,4 +1,9 @@
-APIKEY ='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'
+def apiKey() -> str:
+  APIKEY = None
+  with open('api_key_bk.key', 'r') as f:
+    APIKEY = f.readline()
+  return APIKEY
+
 DOCUMENT = './data/data.txt'
 DOCUMENT_ROOT = 'data/' 
 PERSIST = True

@@ -12,7 +12,7 @@ from langchain.chat_models import ChatOpenAI
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.vectorstores import Chroma
 
-os.environ['OPENAI_API_KEY'] = constants.APIKEY
+os.environ['OPENAI_API_KEY'] = constants.apiKey()
 out(msg=constants.LINE_BREAK, color=CR.blue, reset=False)
 print('DATA_ROOT', constants.DOCUMENT_ROOT)
 print('PERSIST_MODE', constants.PERSIST)
