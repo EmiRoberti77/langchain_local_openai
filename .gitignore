@@ -4,3 +4,7 @@ __pycache__
 *.key
 .vscode
 accounts.txt
+.env
+vector_emi_db-token.json
+.zip
+embedding

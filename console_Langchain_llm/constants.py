@@ -1,17 +1,12 @@
-
-def apiKey() -> str:
-  APIKEY = None
-  with open('api_key_bk.key', 'r') as f:
-    APIKEY = f.readline()
-  return APIKEY
-
-
 DOCUMENT = './data/data.txt'
-DOCUMENT_ROOT = 'data/' 
+DOCUMENT_ROOT = 'news' 
 PERSIST = True
 PERSIST_ROOT = 'persist'
 RESUME_INDEX = 'resuming index'
 LINE_BREAK = '____________________________' 
+exitCommands = ['close', 'q', 'quit', 'exit']
+INPUT_READY = ':>'
+EXIT = 'Ciao!'
 
 class ColorWrapper:
   red = "\033[91m"
@@ -30,3 +25,5 @@ def console(**kwags):
     print(f"{color}{msg}{ColorWrapper.reset}")
   else:
     print(f"{color}{msg}")
+ 
+

@@ -21,7 +21,7 @@ class AIEngine():
   loader = None
 
   def __init__(self) -> None:
-    os.environ['OPENAI_API_KEY'] = constants.APIKEY
+    os.environ['OPENAI_API_KEY'] = constants.apiKey()
     out(msg=constants.LINE_BREAK, color=CR.blue, reset=False)
     print('DATA_ROOT', constants.DOCUMENT_ROOT)
     print('PERSIST_MODE', constants.PERSIST)
