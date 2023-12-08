@@ -7,30 +7,76 @@ from langchain.chains import RetrievalQA
 from langchain.llms import OpenAI
 from constants import console as out
 from constants import ColorWrapper as CR
-import constants
-import os
 from AI.AIXBase import AIXBase
 
 class AIXEngine(AIXBase):
-  def __init__(self):
-    out(msg='OAIX Engine', color=CR.green, reset=True)
-    super().__init__()
+  # embedding = None
+  # documents = None
+  # text_splitter = None
+  # texts = None
+  # qa = None
+  def __init__(self) -> None:
+      super().__init__()
+ 
+  def init_engine(self) -> bool:
+    # super().__init__()
+    out(msg='OAIX Init', color=CR.green, reset=True)
+
     self.embedding = OpenAIEmbeddings()
+    out(msg='OAIX Reason engine', color=CR.green, reset=True)
+    if not self.embedding:
+      out(msg=f"embedding object not initiated", color=CR.red, reset=True)
+      return False
 
     self.loader = DirectoryLoader('news', glob="**/*.txt")
+    out(msg='OAIX reading documents', color=CR.green, reset=True)
+    if not self.loader:
+      out(msg=f"loader object not initiated", color=CR.red, reset=True)
+      return False
+
+
     self.documents = self.loader.load()
-    print('documents len',len(self.documents))
+    out(msg=f"OAIX documents read {len(self.documents)}", color=CR.green, reset=True)
+    if not self.documents:
+      out(msg=f"document object not initiated", color=CR.red, reset=True)
+      return False
 
     self.text_splitter = CharacterTextSplitter(chunk_size=2500, chunk_overlap=0)
+    out(msg=f"OAIX splitting documents into chunks", color=CR.green, reset=True)
+    if not self.text_splitter:
+      out(msg=f"text_splitter object not initiated", color=CR.red, reset=True)
+      return False
+    
+
     self.texts = self.text_splitter.split_documents(self.documents)
+    if not self.texts:
+      out(msg=f"texts object not initiated", color=CR.red, reset=True)
+      return False
+    
 
     self.vec_store = Chroma.from_documents(self.texts, self.embedding)
+    out(msg=f"OAIX create vectors", color=CR.green, reset=True)
+    if not self.vec_store:
+      out(msg=f"vec_store object not initiated", color=CR.red, reset=True)
+      return False
 
     self.qa = RetrievalQA.from_chain_type(llm=OpenAI(), 
                                       chain_type="stuff", 
                                       retriever=self.vec_store.as_retriever())
+    out(msg=f"OAIX ready", color=CR.green, reset=True)
+    if not self.qa:
+      out(msg=f"qa object not initiated", color=CR.red, reset=True)
+      return False
 
-  def prompt(self, **kwargs):
+    return True
+    
+
+  def prompt(self, **kwargs) -> any:
+    if not self.vec_store:
+      out(msg=f"vec_store object not initiated", color=CR.red, reset=True)
+      return "qa failed ot init"
+    
+    
     input=kwargs['input']
     return self.qa.run(input)
     
