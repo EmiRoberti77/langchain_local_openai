@@ -3,6 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from AI.AIXEngine import AIXEngine
 from models.PostItem import PostItem as PromptItem
 from models.UpdateFromS3Item import UpdateFromS3Item as S3Params
+from models.UpdateEngineItem import UpdateEngineItem
+from s3.S3Service import S3Service
 from utils.JsonResponse import JsonResponse as JR
 from utils.Path import Path as p
 from constants import console as out
@@ -39,14 +41,19 @@ def input(input:PromptItem):
 
 
 @app.post(p.UPDATE)
-def update(s3Params:S3Params):   
-    print('input', s3Params.bucket, s3Params.key)
+def update(updateItem:UpdateEngineItem):   
     response = aix.init_engine()
-    body = {
-       "s3":s3Params,
-       "engine_restart":response,
-    }
-    return JR.create(200, body)
+    return JR.create(200, {"client":updateItem, "update_status":response})
+
+
+
+@app.post(p.NEWFILE)
+def newfile(s3Params:S3Params):
+    s3 = S3Service()
+    success = s3.copy(s3Params)
+    return JR.create(200, {"success":success, "s3":s3Params})
+
+
 
 @app.on_event("startup")
 async def startup_event():   
@@ -57,6 +64,6 @@ async def startup_event():
     out(msg='oaix init process completed', color=CR.yellow, reset=True)
    
 if __name__ == "__main__":
-    uvicorn.run("3:app", host="0.0.0.0", port=8001, reload=True)
+    uvicorn.run("oaix:app", host="0.0.0.0", port=8001, reload=True)
     
     
