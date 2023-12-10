@@ -7,8 +7,11 @@ from models.UpdateEngineItem import UpdateEngineItem
 from s3.S3Service import S3Service
 from utils.JsonResponse import JsonResponse as JR
 from utils.Path import Path as p
+from utils.Version import Version as V
+from utils.HttpCodes import HTTP_Codes as HTTP
 from constants import console as out
 from constants import ColorWrapper as CR
+
 import uvicorn
 
 app = FastAPI()
@@ -25,25 +28,24 @@ app.add_middleware(
 
 @app.get(p.HOME)
 def home():
-  JR.create(200, {'engine':'oaix'})
+  return JR.create(HTTP.SUCCESS, V().toJson())
 
 
 @app.get(p.VERSION)
 def version(): 
-    return JR.create(200, aix.AIXVersion())
+    return JR.create(HTTP.SUCCESS, V().toJson())
 
 
 @app.post(p.INPUT)
 def input(input:PromptItem):
-    print('input', input.input)
     inputResponse = aix.prompt(input=input.input)
-    return JR.create(200, inputResponse)
+    return JR.create(HTTP.SUCCESS, inputResponse)
 
 
 @app.post(p.UPDATE)
 def update(updateItem:UpdateEngineItem):   
     response = aix.init_engine()
-    return JR.create(200, {"client":updateItem, "update_status":response})
+    return JR.create(HTTP.SUCCESS, {"client":updateItem, "update_status":response})
 
 
 
@@ -51,7 +53,7 @@ def update(updateItem:UpdateEngineItem):
 def newfile(s3Params:S3Params):
     s3 = S3Service()
     success = s3.copy(s3Params)
-    return JR.create(200, {"success":success, "s3":s3Params})
+    return JR.create(HTTP.SUCCESS, {"success":success, "s3":s3Params})
 
 
 
@@ -62,6 +64,7 @@ async def startup_event():
     aix = AIXEngine() 
     aix.init_engine()
     out(msg='oaix init process completed', color=CR.yellow, reset=True)
+   
    
 if __name__ == "__main__":
     uvicorn.run("oaix:app", host="0.0.0.0", port=8001, reload=True)

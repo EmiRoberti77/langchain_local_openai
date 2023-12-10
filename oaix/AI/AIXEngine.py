@@ -10,11 +10,6 @@ from constants import ColorWrapper as CR
 from AI.AIXBase import AIXBase
 
 class AIXEngine(AIXBase):
-  # embedding = None
-  # documents = None
-  # text_splitter = None
-  # texts = None
-  # qa = None
   def __init__(self) -> None:
       super().__init__()
  

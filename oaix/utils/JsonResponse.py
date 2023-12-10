@@ -1,6 +1,6 @@
 class JsonResponse:
   @staticmethod
-  def create(statusCode=int, body=object):
+  def create(statusCode, body=object):
     response = {
       "statusCode": statusCode,
       "body": body,
