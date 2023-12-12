@@ -1,3 +1,3 @@
 class Storage:
-  DEFAULT = "."
-  NEWS = "news"
+    DEFAULT = "."
+    NEWS = "news"

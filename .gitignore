@@ -8,3 +8,5 @@ accounts.txt
 vector_emi_db-token.json
 .zip
 embedding
+db.db
+*.db
