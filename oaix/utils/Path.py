@@ -8,3 +8,5 @@ class Path:
     ADD_USER = "/adduser"
     ALL_USERS = "/allusers"
     GET_USER = "/getuser"
+    DELETE_USER = '/deleteuser'
+    UPDATE_USER = '/updateuser'

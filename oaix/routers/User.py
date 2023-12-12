@@ -35,9 +35,28 @@ def get_user(id, db: Session = Depends(get_db)):
 
 @router.post(p.ADD_USER)
 def add_user(request: schemas.User, db: Session = Depends(get_db)):
-    new_user = User(name=request.user,
+    print(request)
+    new_user = User(name=request.name,
                     password=request.password, token=request.token)
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
     return JR.create(HTTP.SUCCESS, request)
+
+
+@router.put(p.UPDATE_USER)
+def update_user(id, request: schemas.User, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.id == id)
+    if not user.first():
+        return JR.create(HTTP.SUCCESS, {'row not found'})
+    user.update(request.dict())
+    db.commit()
+    return JR.create(HTTP.SUCCESS, request)
+
+
+@router.delete(p.DELETE_USER)
+def delete_user(id, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.id == id).delete(
+        synchronize_session=False)
+    db.commit()
+    return JR.create(HTTP.SUCCESS, user)
