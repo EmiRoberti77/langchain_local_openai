@@ -7,10 +7,13 @@ from utils.JsonResponse import JsonResponse as JR
 from utils.HttpCodes import HTTP_Codes as HTTP
 from database.database import engine, SessionLocal
 from models.models import Base
+from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 
 router = APIRouter()
 Base.metadata.create_all(engine)
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 def get_db():
@@ -30,28 +33,18 @@ def all_users(db: Session = Depends(get_db)):
 @router.get(p.GET_USER)
 def get_user(id, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.id == id).first()
-    return JR.create(HTTP.SUCCESS, user)
+    return JR.create(HTTP.SUCCESS, schemas.ResponseUser(name=user.name, password=user.password))
 
 
 @router.post(p.ADD_USER)
 def add_user(request: schemas.User, db: Session = Depends(get_db)):
-    print(request)
+    hashed_password = pwd_context.hash(request.password)
     new_user = User(name=request.name,
-                    password=request.password, token=request.token)
+                    password=hashed_password, token=request.token)
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
-    return JR.create(HTTP.SUCCESS, request)
-
-
-@router.put(p.UPDATE_USER)
-def update_user(id, request: schemas.User, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.id == id)
-    if not user.first():
-        return JR.create(HTTP.SUCCESS, {'row not found'})
-    user.update(request.dict())
-    db.commit()
-    return JR.create(HTTP.SUCCESS, request)
+    return JR.create(HTTP.SUCCESS, schemas.ResponseUser(name=new_user.name))
 
 
 @router.delete(p.DELETE_USER)

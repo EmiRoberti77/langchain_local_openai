@@ -4,8 +4,8 @@ from utils.JsonResponse import JsonResponse as JR
 from utils.Path import Path as p
 from utils.Version import Version as V
 from utils.HttpCodes import HTTP_Codes as HTTP
-from constants import console as out
-from constants import ColorWrapper as CR
+from utils.constants import console as out
+from utils.constants import ColorWrapper as CR
 from models.PostItem import PostItem as PromptItem
 from models.UpdateFromS3Item import UpdateFromS3Item as S3Params
 from models.UpdateEngineItem import UpdateEngineItem

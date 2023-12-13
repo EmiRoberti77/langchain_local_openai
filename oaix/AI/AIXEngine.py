@@ -5,8 +5,8 @@ from langchain.text_splitter import CharacterTextSplitter
 from langchain.vectorstores import Chroma
 from langchain.chains import RetrievalQA
 from langchain.llms import OpenAI
-from constants import console as out
-from constants import ColorWrapper as CR
+from utils.constants import console as out
+from utils.constants import ColorWrapper as CR
 from AI.AIXBase import AIXBase
 import os
 
@@ -41,7 +41,8 @@ class AIXEngine(AIXBase):
             out(msg=f"document object not initiated", color=CR.red, reset=True)
             return False
 
-        self.text_splitter = CharacterTextSplitter(chunk_size=2500, chunk_overlap=0)
+        self.text_splitter = CharacterTextSplitter(
+            chunk_size=2500, chunk_overlap=0)
         out(msg=f"OAIX splitting documents into chunks", color=CR.green, reset=True)
         if not self.text_splitter:
             out(msg=f"text_splitter object not initiated", color=CR.red, reset=True)

@@ -1,6 +1,6 @@
 from dotenv import load_dotenv
-from constants import console as out
-from constants import ColorWrapper as CR
+from utils.constants import console as out
+from utils.constants import ColorWrapper as CR
 import os
 
 
