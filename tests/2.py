@@ -5,9 +5,9 @@ from langchain.text_splitter import CharacterTextSplitter
 from langchain.vectorstores import Chroma
 from langchain.chains import RetrievalQA
 from langchain.llms import OpenAI
-from constants import console as out
-from constants import ColorWrapper as CR
-import constants
+from oaix.utils.constants import console as out
+from oaix.utils.constants import ColorWrapper as CR
+import oaix.utils.constants as constants
 import os
 
 load_dotenv()

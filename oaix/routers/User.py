@@ -9,6 +9,8 @@ from database.database import engine, SessionLocal
 from models.models import Base
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
+from database.database import get_db
+from routers.login import get_current_user
 
 router = APIRouter()
 Base.metadata.create_all(engine)
@@ -16,28 +18,20 @@ Base.metadata.create_all(engine)
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-
 @router.get(p.ALL_USERS)
-def all_users(db: Session = Depends(get_db)):
+def all_users(db: Session = Depends(get_db), create_user: User = Depends(get_current_user)):
     users = db.query(User).all()
     return JR.create(HTTP.SUCCESS, users)
 
 
 @router.get(p.GET_USER)
-def get_user(id, db: Session = Depends(get_db)):
+def get_user(id, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     user = db.query(User).filter(User.id == id).first()
     return JR.create(HTTP.SUCCESS, schemas.ResponseUser(name=user.name, password=user.password))
 
 
 @router.post(p.ADD_USER)
-def add_user(request: schemas.User, db: Session = Depends(get_db)):
+def add_user(request: schemas.User, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     hashed_password = pwd_context.hash(request.password)
     new_user = User(name=request.name,
                     password=hashed_password, token=request.token)
@@ -48,7 +42,7 @@ def add_user(request: schemas.User, db: Session = Depends(get_db)):
 
 
 @router.delete(p.DELETE_USER)
-def delete_user(id, db: Session = Depends(get_db)):
+def delete_user(id, db: Session = Depends(get_db), create_user: User = Depends(get_current_user)):
     user = db.query(User).filter(User.id == id).delete(
         synchronize_session=False)
     db.commit()
